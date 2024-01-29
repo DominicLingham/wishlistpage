@@ -1,24 +1,23 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+const addItemButton = document.getElementById("add-item-btn");
+const wishlistItems = document.getElementById("wishlist-items");
+const items = [];
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
+const addItem = (e) => {
+  e.preventDefault();
+  console.log("add item!");
+  let object = {
+    name: "Book",
+    price: "£15.99",
+    quantity: 1,
+  };
+  items.push(object);
+  wishlistItems.innerHTML += `
+  <div class="item">
+  <h3>${items[0].name}</h3>
+  <p>${items[0].price}</p>
+  <p>${items[0].quantity}</p>
   </div>
-`
+  `;
+};
 
-setupCounter(document.querySelector('#counter'))
+addItemButton.addEventListener("click", addItem);
