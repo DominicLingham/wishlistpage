@@ -1,52 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Wishlist</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <title>Wishlist</title>
-</head>
-
-<body>
-  <div id="app">
-    <div class="page-intro">
-      <h1>My Wishlist</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero rem et
-        quod illum commodi fuga id hic mollitia temporibus pariatur inventore,
-        maxime sunt excepturi dolorum velit harum quae? Expedita, saepe?
-      </p>
-    </div>
-    <div class="add-section">
-      <h2>Add a wishlist item</h2>
-      <button>+</button>
-      <form action="">
-        <label for="item-name-input">Item name</label>
-        <input type="text" id="item-name-input" name="item-name-input" />
-        <label for="item-url">Link</label>
-        <input type="url" id="item-url" name="item-url" placeholder="https://www.amazon.com" />
-        <label for="item-price-input">Price</label>
-        <input type="number" step="0.01" id="item-price-input" name="item-price-input" />
-        <label for="item-quantity-input">Quantity</label>
-        <input type="number" id="item-quantity-input" name="item-quantity-input" />
-        <button type="submit" id="add-item-btn" onsubmit="return false">Add item</button>
-      </form>
-    </div>
-    <div class="wishlist-items" id="wishlist-items">
-      <div class="item">
-        <a href="www.google.com" target="_blank">
-          <p class="item-title">Book</p>
-
-          <p class="item-price">£15.99</p>
-
-          <p class="item-quantity">1</p>
-        </a>
-        <button class="remove-btn">Remove item</button>
+  <body>
+    <div id="app">
+      <div class="page-intro">
+        <h1>My Wishlist</h1>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero rem et
+          quod illum commodi fuga id hic mollitia temporibus pariatur inventore,
+          maxime sunt excepturi dolorum velit harum quae? Expedita, saepe?
+        </p>
       </div>
+      <div class="add-section">
+        <h2>Add a wishlist item</h2>
+        <button>+</button>
+        <form action="">
+          <label for="item-name-input">Item name</label>
+          <input type="text" id="item-name-input" name="item-name-input" />
+          <label for="item-url">Link</label>
+          <input
+            type="url"
+            id="item-url"
+            name="item-url"
+            placeholder="https://www.amazon.com"
+          />
+          <label for="item-price-input">Price</label>
+          <input
+            type="number"
+            step="0.01"
+            id="item-price-input"
+            name="item-price-input"
+          />
+          <label for="item-quantity-input">Quantity</label>
+          <input
+            type="number"
+            id="item-quantity-input"
+            name="item-quantity-input"
+          />
+          <button type="submit" id="add-item-btn" onsubmit="return false">
+            Add item
+          </button>
+        </form>
+      </div>
+      <div class="wishlist-items" id="wishlist-items"></div>
     </div>
-  </div>
-  <script src="/main.js"></script>
-</body>
-
+    <script src="/main.js"></script>
+  </body>
 </html>
