@@ -1,4 +1,6 @@
 const addItemButton = document.getElementById("add-item-btn");
+const displayAddSectionButton = document.getElementById("display-add-section");
+const addSection = document.getElementById("add-section");
 const wishlistItems = document.getElementById("wishlist-items");
 const urlInput = document.getElementById("item-url");
 const nameInput = document.getElementById("item-name-input");
@@ -94,4 +96,10 @@ const validateInputs = (vals) => {
   return true;
 };
 
+const displayAddSection = () => {
+  addSection.classList.toggle("show");
+};
+
 addItemButton.addEventListener("click", addItem);
+
+displayAddSectionButton.addEventListener("click", displayAddSection);
