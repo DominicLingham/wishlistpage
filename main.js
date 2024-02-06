@@ -1,14 +1,20 @@
 const addItemButton = document.getElementById("add-item-btn");
-const displayAddSectionButton = document.getElementById("display-add-section");
-const addSection = document.getElementById("add-section");
+const displayAddSection = document.getElementById("display-add-section");
+const hideAddSection = document.getElementById("hide-add-section");
+const addSection = document.getElementById("add-section-container");
 const wishlistItems = document.getElementById("wishlist-items");
 const urlInput = document.getElementById("item-url");
 const nameInput = document.getElementById("item-name-input");
 const priceInput = document.getElementById("item-price-input");
 const quantityInput = document.getElementById("item-quantity-input");
 const categoryInput = document.getElementById("category-picker");
+const wishlistTotal = document.getElementById("wishlist-total");
 const wishlistEntries = [];
 let itemId = 1;
+
+// Initialize the price and quantity values to default values
+priceInput.value = 0;
+quantityInput.value = 1;
 
 const getInputValues = () => {
   //Gets the user's inputted values
@@ -32,7 +38,7 @@ const getInputValues = () => {
     price: priceVal.toString(),
     quantity: quantityVal.toString(),
     category: categoryVal,
-    totalCost: lineTotal.toString(),
+    totalCost: lineTotal,
   };
 
   return obj;
@@ -48,34 +54,39 @@ const addItem = (e) => {
   const itemObject = getInputValues();
 
   wishlistEntries.push(itemObject);
+  updateWishlistTotal(wishlistEntries);
 
   let isValid = validateInputs(itemObject);
 
   if (isValid) {
     wishlistItems.innerHTML += `
-    <div class="item" data-item-id=${itemId}>
-    <a href="${itemObject.url}" target="_blank">
+    <div class="item" data-item-id="${itemId}">
+    <p>ID: ${itemId}</p>
     <span class="category-icon">${itemObject.category}</span>
-      <p class="item-title">${itemObject.name}</p>
-
-      <p class="item-price">£${itemObject.price}</p>
-
-      <p class="item-quantity">${itemObject.quantity}</p>
-
-      <p class="total-line-price">£${itemObject.totalCost}</p>
-    </a>
-    <button class="remove-btn" onclick="removeItem(${itemId})">Remove item</button>
-  </div>
-    `;
+    <p class="item-title">${itemObject.name}</p>
+  
+    <p class="item-price">£${itemObject.price}</p>
+  
+    <p class="item-quantity">${itemObject.quantity}</p>
+  
+    <p class="total-line-price">£${itemObject.totalCost.toString()}</p>
+    <a
+      href="${itemObject.url}"
+      target="_blank"
+      ><i class="fa-solid fa-arrow-up-right-from-square"></i
+    ></a>
+    <button class="remove-btn" onclick="removeItem(${itemId})">
+    <i class="fa-solid fa-trash-can"></i>
+    </button>
+  </div>`;
 
     itemId++;
+    toggleVisibility(addSection);
   }
 };
 
 const removeItem = (itemId) => {
   //TODO: removes wishlist item
-  console.log("removing..." + itemId);
-
   const itemToRemove = document.querySelector(
     `.item[data-item-id="${itemId}"]`
   );
@@ -94,12 +105,31 @@ const validateInputs = (vals) => {
     }
   }
   return true;
+  //TODO: Add error message when validation fails
 };
 
-const displayAddSection = () => {
-  addSection.classList.toggle("show");
+const updateWishlistTotal = (items) => {
+  let totalPrice = 0;
+  console.log(items);
+  items.forEach((element) => {
+    totalPrice += element.totalCost;
+  });
+  console.log(totalPrice);
+  wishlistTotal.innerText = "£" + totalPrice.toString();
+};
+
+// Toggles an element to be visible or hidden
+const toggleVisibility = (el) => {
+  el.classList.toggle("show");
+  el.classList.toggle("hidden");
 };
 
 addItemButton.addEventListener("click", addItem);
 
-displayAddSectionButton.addEventListener("click", displayAddSection);
+displayAddSection.addEventListener("click", () => {
+  toggleVisibility(addSection);
+});
+
+hideAddSection.addEventListener("click", () => {
+  toggleVisibility(addSection);
+});
