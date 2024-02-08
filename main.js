@@ -10,22 +10,20 @@ const quantityInput = document.getElementById("item-quantity-input");
 const categoryInput = document.getElementById("category-picker");
 const wishlistTotal = document.getElementById("wishlist-total");
 const wishlistEntries = [];
-let itemId = 1;
 
-// Initialize the price and quantity values to default values
+// Initialize default values
 priceInput.value = 0;
 quantityInput.value = 1;
+let itemId = 1;
 
 const getInputValues = () => {
   //Gets the user's inputted values
-  let urlVal = urlInput.value;
-  let nameVal = nameInput.value;
-  let priceVal = priceInput.value;
-  let quantityVal = quantityInput.value;
-  let categoryVal = categoryInput.value;
+  let { value: urlVal } = urlInput;
+  let { value: nameVal } = nameInput;
+  let { value: priceVal } = priceInput;
+  let { value: quantityVal } = quantityInput;
+  let { value: categoryVal } = categoryInput;
   let lineTotal = priceVal * quantityVal;
-
-  console.log(priceVal, quantityVal, lineTotal);
 
   //Ensures url is not considered a relative link
   if (!urlVal.startsWith("http://") && !urlVal.startsWith("https://")) {
