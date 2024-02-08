@@ -49,37 +49,34 @@ const clearInputValues = () => {
 };
 
 const addItem = (e) => {
-  // Adds wishlist item to page
   e.preventDefault();
   const itemObject = getInputValues();
-
   wishlistEntries.push(itemObject);
   updateWishlistTotal(wishlistEntries);
 
   let isValid = validateInputs(itemObject);
 
   if (isValid) {
-    wishlistItems.innerHTML += `
-    <div class="item" data-item-id="${itemId}">
-    <p>ID: ${itemId}</p>
-    <span class="category-icon">${itemObject.category}</span>
-    <p class="item-title">${itemObject.name}</p>
-  
-    <p class="item-price">£${itemObject.price}</p>
-  
-    <p class="item-quantity">${itemObject.quantity}</p>
-  
-    <p class="total-line-price">£${itemObject.totalCost.toString()}</p>
-    <a
-      href="${itemObject.url}"
-      target="_blank"
-      ><i class="fa-solid fa-arrow-up-right-from-square"></i
-    ></a>
-    <button class="remove-btn" onclick="removeItem(${itemId})">
-    <i class="fa-solid fa-trash-can"></i>
-    </button>
-  </div>`;
+    const newItem = document.createElement("div");
+    newItem.classList.add("item");
+    newItem.dataset.itemId = itemId;
 
+    newItem.innerHTML = `
+      <p>ID: ${itemId}</p>
+      <span class="category-icon">${itemObject.category}</span>
+      <p class="item-title">${itemObject.name}</p>
+      <p class="item-price">£${itemObject.price}</p>
+      <p class="item-quantity">${itemObject.quantity}</p>
+      <p class="total-line-price">£${itemObject.totalCost.toString()}</p>
+      <a href="${itemObject.url}" target="_blank">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+      <button class="remove-btn" onclick="removeItem(${itemId})">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+    `;
+
+    wishlistItems.appendChild(newItem);
     itemId++;
     toggleVisibility(addSection);
   }
