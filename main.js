@@ -9,6 +9,8 @@ const priceInput = document.getElementById("item-price-input");
 const quantityInput = document.getElementById("item-quantity-input");
 const categoryInput = document.getElementById("category-picker");
 const wishlistTotal = document.getElementById("wishlist-total");
+const emptyWishlistMessage = document.getElementById("wishlist-empty-message");
+const validationMessage = document.getElementById("validation-message");
 const wishlistEntries = [];
 let itemId = 1;
 
@@ -33,10 +35,11 @@ const getInputValues = () => {
   }
 
   let obj = {
+    itemId: itemId,
     url: urlVal,
     name: nameVal,
-    price: priceVal.toString(),
-    quantity: quantityVal.toString(),
+    price: parseFloat(priceVal),
+    quantity: parseInt(quantityVal),
     category: categoryVal,
     totalCost: lineTotal,
   };
@@ -44,25 +47,29 @@ const getInputValues = () => {
   return obj;
 };
 
-const clearInputValues = () => {
-  //TODO: clear values of inputs when item is added to wishlist
-};
-
 const addItem = (e) => {
   e.preventDefault();
   const itemObject = getInputValues();
-  wishlistEntries.push(itemObject);
-  updateWishlistTotal(wishlistEntries);
 
   let isValid = validateInputs(itemObject);
 
-  if (isValid) {
-    const newItem = document.createElement("div");
-    newItem.classList.add("item");
-    newItem.dataset.itemId = itemId;
+  // Show validation message if any input is empty
+  if (!isValid) {
+    validationMessage.classList.replace("hidden", "show");
+    return;
+  }
 
-    newItem.innerHTML = `
-      <p>ID: ${itemId}</p>
+  wishlistEntries.push(itemObject);
+
+  updateWishlistTotal(wishlistEntries);
+
+  const newItem = document.createElement("div");
+  const wishlistItemId = itemObject.itemId;
+  newItem.classList.add("item");
+  newItem.dataset.wishlistItemId = itemObject.itemId;
+
+  newItem.innerHTML = `
+      <p>ID: ${wishlistItemId}</p>
       <span class="category-icon">${itemObject.category}</span>
       <p class="item-title">${itemObject.name}</p>
       <p class="item-price">£${itemObject.price}</p>
@@ -71,21 +78,26 @@ const addItem = (e) => {
       <a href="${itemObject.url}" target="_blank">
         <i class="fa-solid fa-arrow-up-right-from-square"></i>
       </a>
-      <button class="remove-btn" onclick="removeItem(${itemId})">
+      <button class="remove-btn" onclick="removeItem(${wishlistItemId})">
         <i class="fa-solid fa-trash-can"></i>
       </button>
     `;
 
-    wishlistItems.appendChild(newItem);
-    itemId++;
-    toggleVisibility(addSection);
+  wishlistItems.appendChild(newItem);
+
+  if (validationMessage.classList.contains("show")) {
+    validationMessage.classList.replace("show", "hidden");
   }
+
+  toggleVisibility(addSection);
+  clearInputValues();
+  itemId++;
+  console.log(wishlistEntries);
 };
 
-const removeItem = (itemId) => {
-  //TODO: removes wishlist item
+const removeItem = (id) => {
   const itemToRemove = document.querySelector(
-    `.item[data-item-id="${itemId}"]`
+    `.item[data-wishlist-item-id="${id}"]`
   );
 
   if (itemToRemove) {
@@ -93,6 +105,13 @@ const removeItem = (itemId) => {
   } else {
     alert("Cannot remove item that does not exist!");
   }
+
+  let index = wishlistEntries.findIndex((item) => item.itemId === id);
+  if (index >= 0) {
+    wishlistEntries.splice(index, 1);
+  }
+  // Removes wishlist entry's total price from wishlist total
+  updateWishlistTotal(wishlistEntries);
 };
 
 const validateInputs = (vals) => {
@@ -102,7 +121,6 @@ const validateInputs = (vals) => {
     }
   }
   return true;
-  //TODO: Add error message when validation fails
 };
 
 const updateWishlistTotal = (items) => {
@@ -115,10 +133,25 @@ const updateWishlistTotal = (items) => {
   wishlistTotal.innerText = "£" + totalPrice.toString();
 };
 
-// Toggles an element to be visible or hidden
+const clearInputValues = () => {
+  urlInput.value = "";
+  nameInput.value = "";
+  categoryInput.value = "";
+  quantityInput.value = 1;
+  priceInput.value = 0;
+};
+
+/**
+ * Toggles an element to be visible or hidden
+ * Params: el - the element to hide or display
+ */
 const toggleVisibility = (el) => {
   el.classList.toggle("show");
   el.classList.toggle("hidden");
+};
+
+const setTwoDecimal = (input) => {
+  input.value = parseFloat(input.value).toFixed(2);
 };
 
 addItemButton.addEventListener("click", addItem);
@@ -130,3 +163,6 @@ displayAddSection.addEventListener("click", () => {
 hideAddSection.addEventListener("click", () => {
   toggleVisibility(addSection);
 });
+
+// Sets price input field to two decimal places when clicked out of
+priceInput.addEventListener("blur", () => setTwoDecimal(priceInput));
