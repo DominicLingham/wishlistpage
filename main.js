@@ -20,6 +20,7 @@ let itemId = 1;
 // Initialize the price and quantity values to default values
 priceInput.value = 0;
 quantityInput.value = 1;
+emptyWishlistMessage.classList.add("show");
 
 /**
  * Gets the user's input to the wishlist item form
@@ -81,7 +82,6 @@ const addItem = (e) => {
   newItem.dataset.wishlistItemId = itemObject.itemId;
 
   newItem.innerHTML = `
-      <p>ID: ${wishlistItemId}</p>
       <span class="category-icon">${itemObject.category}</span>
       <p class="item-title">${itemObject.name}</p>
       <p class="item-price">£${itemObject.price}</p>
@@ -101,6 +101,7 @@ const addItem = (e) => {
     validationMessage.classList.replace("show", "hidden");
   }
 
+  updateEmptyWishlistMessage();
   toggleVisibility(addSection);
   clearInputValues();
   itemId++;
@@ -128,6 +129,8 @@ window.removeItem = (id) => {
   }
   // Removes wishlist entry's total price from wishlist total
   updateWishlistTotal(wishlistEntries);
+  //hideEmptyWishlistMessage();
+  updateEmptyWishlistMessage();
 };
 
 /**
@@ -200,6 +203,18 @@ const toggleVisibility = (el) => {
  */
 const setTwoDecimal = (input) => {
   input.value = parseFloat(input.value).toFixed(2);
+};
+
+/**
+ * Shows the 'Wishlist is empty' message if the wishlist is empty,
+ * otherwise hides the message.
+ */
+const updateEmptyWishlistMessage = () => {
+  if (wishlistEntries.length === 0) {
+    emptyWishlistMessage.classList.replace("hidden", "show");
+  } else {
+    emptyWishlistMessage.classList.replace("show", "hidden");
+  }
 };
 
 /**
