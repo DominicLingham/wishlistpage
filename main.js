@@ -1,3 +1,4 @@
+import printJS from "print-js";
 const addItemButton = document.getElementById("add-item-btn");
 const displayAddSection = document.getElementById("display-add-section");
 const hideAddSection = document.getElementById("hide-add-section");
@@ -11,6 +12,8 @@ const categoryInput = document.getElementById("category-picker");
 const wishlistTotal = document.getElementById("wishlist-total");
 const emptyWishlistMessage = document.getElementById("wishlist-empty-message");
 const validationMessage = document.getElementById("validation-message");
+const printWishlistButton = document.getElementById("print-wishlist");
+const printSection = document.getElementById("print-section");
 const wishlistEntries = [];
 let itemId = 1;
 
@@ -78,7 +81,7 @@ const addItem = (e) => {
       <a href="${itemObject.url}" target="_blank">
         <i class="fa-solid fa-arrow-up-right-from-square"></i>
       </a>
-      <button class="remove-btn" onclick="removeItem(${wishlistItemId})">
+      <button class="remove-btn" onclick="removeItem(${wishlistItemId})" id="export">
         <i class="fa-solid fa-trash-can"></i>
       </button>
     `;
@@ -141,6 +144,17 @@ const clearInputValues = () => {
   priceInput.value = 0;
 };
 
+const printWishlist = () => {
+  printJS({
+    printable: printSection,
+    type: "html",
+    header: "My Wishlist",
+    css: "style.css",
+    ignoreElements: ["export"],
+    documentTitle: "My Wishlist",
+  });
+};
+
 /**
  * Toggles an element to be visible or hidden
  * Params: el - the element to hide or display
@@ -166,3 +180,5 @@ hideAddSection.addEventListener("click", () => {
 
 // Sets price input field to two decimal places when clicked out of
 priceInput.addEventListener("blur", () => setTwoDecimal(priceInput));
+
+printWishlistButton.addEventListener("click", printWishlist);
