@@ -14,7 +14,10 @@ const emptyWishlistMessage = document.getElementById("wishlist-empty-message");
 const validationMessage = document.getElementById("validation-message");
 const printWishlistButton = document.getElementById("print-wishlist");
 const printSection = document.getElementById("print-section");
-const wishlistEntries = [];
+const wishlistSaveButton = document.getElementById("wishlist-save");
+const wishlistLoadButton = document.getElementById("wishlist-load");
+const wishlistDeleteButton = document.getElementById("wishlist-delete");
+let wishlistEntries = [];
 let itemId = 1;
 
 // Initialize default values
@@ -53,6 +56,29 @@ const getInputValues = () => {
   return obj;
 };
 
+const renderItem = (item) => {
+  const newItem = document.createElement("div");
+  const wishlistItemId = item.itemId;
+  newItem.classList.add("item");
+  newItem.dataset.wishlistItemId = item.itemId;
+
+  newItem.innerHTML = `
+      <span class="category-icon">${item.category}</span>
+      <p class="item-title">${item.name}</p>
+      <p class="item-price">£${item.price}</p>
+      <p class="item-quantity">${item.quantity}</p>
+      <p class="total-line-price">£${item.totalCost.toString()}</p>
+      <a href="${item.url}" target="_blank">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+      <button class="remove-btn" onclick="removeItem(${wishlistItemId})" id="export">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+    `;
+
+  wishlistItems.appendChild(newItem);
+};
+
 /**
  *
  * @param e prevents default
@@ -74,26 +100,28 @@ const addItem = (e) => {
 
   updateWishlistTotal(wishlistEntries);
 
-  const newItem = document.createElement("div");
-  const wishlistItemId = itemObject.itemId;
-  newItem.classList.add("item");
-  newItem.dataset.wishlistItemId = itemObject.itemId;
+  // const newItem = document.createElement("div");
+  // const wishlistItemId = itemObject.itemId;
+  // newItem.classList.add("item");
+  // newItem.dataset.wishlistItemId = itemObject.itemId;
 
-  newItem.innerHTML = `
-      <span class="category-icon">${itemObject.category}</span>
-      <p class="item-title">${itemObject.name}</p>
-      <p class="item-price">£${itemObject.price}</p>
-      <p class="item-quantity">${itemObject.quantity}</p>
-      <p class="total-line-price">£${itemObject.totalCost.toString()}</p>
-      <a href="${itemObject.url}" target="_blank">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-      </a>
-      <button class="remove-btn" onclick="removeItem(${wishlistItemId})" id="export">
-        <i class="fa-solid fa-trash-can"></i>
-      </button>
-    `;
+  // newItem.innerHTML = `
+  //     <span class="category-icon">${itemObject.category}</span>
+  //     <p class="item-title">${itemObject.name}</p>
+  //     <p class="item-price">£${itemObject.price}</p>
+  //     <p class="item-quantity">${itemObject.quantity}</p>
+  //     <p class="total-line-price">£${itemObject.totalCost.toString()}</p>
+  //     <a href="${itemObject.url}" target="_blank">
+  //       <i class="fa-solid fa-arrow-up-right-from-square"></i>
+  //     </a>
+  //     <button class="remove-btn" onclick="removeItem(${wishlistItemId})" id="export">
+  //       <i class="fa-solid fa-trash-can"></i>
+  //     </button>
+  //   `;
 
-  wishlistItems.appendChild(newItem);
+  // wishlistItems.appendChild(newItem);
+
+  renderItem(itemObject);
 
   if (validationMessage.classList.contains("show")) {
     validationMessage.classList.replace("show", "hidden");
@@ -216,6 +244,37 @@ const updateEmptyWishlistMessage = () => {
 };
 
 /**
+ * Allows the user to save a wishlist to their local storage
+ */
+const saveWishlist = () => {
+  if (wishlistEntries.length !== 0) {
+    window.localStorage.setItem(
+      "savedWishList",
+      JSON.stringify(wishlistEntries)
+    );
+    console.log("wishlist saved!");
+  } else {
+    console.log("cannot save empty wishlist");
+  }
+};
+
+/**
+ * Allows the user to load a wishlist stored in
+ * local storage if it exists
+ */
+const loadWishlist = () => {
+  const savedWishList = JSON.parse(
+    window.localStorage.getItem("savedWishList")
+  );
+  console.log(savedWishList);
+  wishlistEntries = savedWishList;
+  savedWishList.forEach((item) => {
+    renderItem(item);
+  });
+  updateWishlistTotal(wishlistEntries);
+};
+
+/**
  * Sets event listeners
  */
 addItemButton.addEventListener("click", addItem);
@@ -231,3 +290,7 @@ hideAddSection.addEventListener("click", () => {
 priceInput.addEventListener("blur", () => setTwoDecimal(priceInput));
 
 printWishlistButton.addEventListener("click", printWishlist);
+
+wishlistSaveButton.addEventListener("click", saveWishlist);
+
+wishlistLoadButton.addEventListener("click", loadWishlist);
