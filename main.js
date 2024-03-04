@@ -15,6 +15,9 @@ const validationMessage = document.getElementById("validation-message");
 const printWishlistButton = document.getElementById("print-wishlist");
 const printSection = document.getElementById("print-section");
 const wishlistEntries = [];
+const wishlistSaveButton = document.getElementById("wishlist-save");
+const wishlistLoadButton = document.getElementById("wishlist-load");
+const wishlistDeleteButton = document.getElementById("wishlist-delete");
 let itemId = 1;
 
 // Initialize the price and quantity values to default values
@@ -217,6 +220,41 @@ const updateEmptyWishlistMessage = () => {
   }
 };
 
+const saveWishlist = () => {
+  if (wishlistEntries.length !== 0) {
+    window.localStorage.setItem(
+      "savedWishlist",
+      JSON.stringify(wishlistEntries)
+    );
+  } else {
+    console.log("cannot save empty wishlist");
+  }
+};
+
+const wishlistLoad = () => {
+  let UserSavedWishlist = window.localStorage.getItem("savedWishlist");
+  if (UserSavedWishlist != null) {
+    console.log(UserSavedWishlist);
+    wishlistEntries.push(UserSavedWishlist);
+    console.log(wishlistEntries);
+    for (let i = 0; i < wishlistEntries.length; i++) {
+      console.log(wishlistEntries[i]);
+    }
+  } else {
+    console.log("no saved wishlist found");
+  }
+};
+
+const wishlistDelete = () => {
+  let UserSavedWishlist = window.localStorage.getItem("savedWishlist");
+  if (UserSavedWishlist !== null) {
+    window.localStorage.removeItem("savedWishlist");
+    console.log("wishlist deleted");
+  } else {
+    console.log("no saved wishlist to delete");
+  }
+};
+
 /**
  * Sets event listeners
  */
@@ -233,3 +271,9 @@ hideAddSection.addEventListener("click", () => {
 priceInput.addEventListener("blur", () => setTwoDecimal(priceInput));
 
 printWishlistButton.addEventListener("click", printWishlist);
+
+wishlistSaveButton.addEventListener("click", saveWishlist);
+
+wishlistLoadButton.addEventListener("click", wishlistLoad);
+
+wishlistDeleteButton.addEventListener("click", wishlistDelete);
