@@ -15,22 +15,15 @@ const validationMessage = document.getElementById("validation-message");
 const printWishlistButton = document.getElementById("print-wishlist");
 const printSection = document.getElementById("print-section");
 const wishlistEntries = [];
-<<<<<<< HEAD
-=======
 const wishlistSaveButton = document.getElementById("wishlist-save");
 const wishlistLoadButton = document.getElementById("wishlist-load");
 const wishlistDeleteButton = document.getElementById("wishlist-delete");
 let itemId = 1;
->>>>>>> d12bb6f83f335cc402747504b2b732374d52acc2
 
 // Initialize default values
 priceInput.value = 0;
 quantityInput.value = 1;
-<<<<<<< HEAD
-let itemId = 1;
-=======
 emptyWishlistMessage.classList.add("show");
->>>>>>> d12bb6f83f335cc402747504b2b732374d52acc2
 
 /**
  * Gets the user's input to the wishlist item form
